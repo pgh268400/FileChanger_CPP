@@ -33,15 +33,37 @@ FileManager::FileManager(string path)
 	}
 
 	file_count = file_list.size();
+	dir_count = dir_list.size();
+	all_count = file_count + dir_count;
 }
 
 int FileManager::get_file_count() const { return file_count; }
 
+int FileManager::get_dir_count() const { return dir_count; }
+
+int FileManager::get_all_count() const { return all_count; }
+
+//파일만 출력
 void FileManager::print_file_list()
 {
 	for (string& element : file_list) {
 		cout << element << endl;
 	}
+}
+
+//디렉토리만 출력
+void FileManager::print_dir_list()
+{
+	for (string& element : dir_list) {
+		cout << element << endl;
+	}
+}
+
+//전부 출력
+void FileManager::print_all_list()
+{
+	print_file_list();
+	print_dir_list();
 }
 
 void FileManager::replace_file_name(string find, string replace)
@@ -65,11 +87,11 @@ void FileManager::replace_file_name(string find, string replace)
 			int status = rename(origin_path.c_str(), element.c_str());
 			if (status == 0)
 			{
-				cout << std::format(">>> {} 를 {} 로 변경하였습니다.", origin_path, element) << endl;
+				cout << format(">>> {} 를 {} 로 변경하였습니다.", origin_path, element) << endl;
 			}
 			else if (status == -1)
 			{
-				cout << std::format(">>> {} 를 {} 로 변경하는데 실패하였습니다.", origin_path, element) << endl;
+				cout << format(">>> {} 를 {} 로 변경하는데 실패하였습니다.", origin_path, element) << endl;
 				element = origin_path; //작업 실패시 원본 리스트 요소를 원래대로 되돌린다.
 			}
 		}
@@ -96,11 +118,11 @@ void FileManager::insert_right_file_name(string insert_str)
 		int status = rename(origin_path.c_str(), element.c_str());
 		if (status == 0)
 		{
-			cout << std::format(">>> {} 를 {} 로 변경하였습니다.", origin_path, element) << endl;
+			cout << format(">>> {} 를 {} 로 변경하였습니다.", origin_path, element) << endl;
 		}
 		else if (status == -1)
 		{
-			cout << std::format(">>> {} 를 {} 로 변경하는데 실패하였습니다.", origin_path, element) << endl;
+			cout << format(">>> {} 를 {} 로 변경하는데 실패하였습니다.", origin_path, element) << endl;
 		}
 	}
 }
@@ -123,11 +145,11 @@ void FileManager::insert_left_file_name(string insert_str)
 		int status = rename(origin_path.c_str(), element.c_str());
 		if (status == 0)
 		{
-			cout << std::format(">>> {} 를 {} 로 변경하였습니다.", origin_path, element) << endl;
+			cout << format(">>> {} 를 {} 로 변경하였습니다.", origin_path, element) << endl;
 		}
 		else if (status == -1)
 		{
-			cout << std::format(">>> {} 를 {} 로 변경하는데 실패하였습니다.", origin_path, element) << endl;
+			cout << format(">>> {} 를 {} 로 변경하는데 실패하였습니다.", origin_path, element) << endl;
 		}
 	}
 }

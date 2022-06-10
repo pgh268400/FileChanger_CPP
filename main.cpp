@@ -7,7 +7,7 @@ using std::cout;
 using std::endl;
 using std::string;
 using std::cin;
-
+using std::format;
 
 
 //아스키 아트 출력용 변수
@@ -86,7 +86,7 @@ int main(void) {
 			getline(cin, replace);
 
 			string dialog;
-			cout << std::format("해당 경로의 \"{}\" 문자를 찾아서 \"{}\" (으)로 치환해서 이름을 변경합니다. \n정말 수행하시겠습니까 ? (y/n) : ", find, replace);
+			cout << format("해당 경로의 \"{}\" 문자를 찾아서 \"{}\" (으)로 치환해서 이름을 변경합니다. \n정말 수행하시겠습니까 ? (y/n) : ", find, replace);
 			cin >> dialog;
 
 			if (dialog == "y") {
@@ -104,7 +104,7 @@ int main(void) {
 			cout << "삽입할 문자열을 입력해주세요 : ";
 			getline(cin, insert_str);
 
-			cout << std::format("해당 경로의 파일 이름 앞에 \"{}\" 을 모두 삽입합니다. \n정말 수행하시겠습니까 ? (y/n) : ", insert_str);
+			cout << format("해당 경로의 파일 이름 앞에 \"{}\" 을 모두 삽입합니다. \n정말 수행하시겠습니까 ? (y/n) : ", insert_str);
 			cin >> dialog;
 
 			if (dialog == "y") {
@@ -119,7 +119,7 @@ int main(void) {
 			cout << "삽입할 문자열을 입력해주세요 : ";
 			getline(cin, insert_str);
 
-			cout << std::format("해당 경로의 파일 이름 뒤에 \"{}\" 을 모두 삽입합니다. \n정말 수행하시겠습니까 ? (y/n) : ", insert_str);
+			cout << format("해당 경로의 파일 이름 뒤에 \"{}\" 을 모두 삽입합니다. \n정말 수행하시겠습니까 ? (y/n) : ", insert_str);
 			cin >> dialog;
 
 			if (dialog == "y") {
@@ -134,5 +134,6 @@ int main(void) {
 		}
 	} while (mode != "e");
 
+	getchar(); //프로그램 바로 종료되지 않게 하기
 	return 0;
 }
