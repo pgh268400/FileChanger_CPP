@@ -66,16 +66,80 @@ void FileManager::print_all_list()
 	print_dir_list();
 }
 
-void FileManager::replace_file_name(string find, string replace)
+//-------------------------------------------
+// 
+//파일 이름 치환
+void FileManager::replace_file_name(string& find, string& replace)
 {
-	for (string& element : file_list) { //element는 레퍼런스로 원본에 접근중임을 유의하자.
+	replace_name(file_list, find, replace);
+}
+
+
+//파일 이름 오른쪽에 문자열 삽입
+void FileManager::insert_right_file_name(string& insert_str)
+{
+	insert_right_name(file_list, insert_str);
+}
+
+//파일 이름 왼쪽에 문자열 삽입
+void FileManager::insert_left_file_name(string& insert_str)
+{
+	insert_left_name(file_list, insert_str);
+}
+
+//-------------------------------------------
+
+void FileManager::replace_dir_name(string& find, string& replace)
+{
+	replace_name(dir_list, find, replace);
+}
+
+void FileManager::insert_left_dir_name(string& insert_str)
+{
+	insert_left_name(dir_list, insert_str);
+}
+
+void FileManager::insert_right_dir_name(string& insert_str)
+{
+	insert_right_name(dir_list, insert_str);
+}
+
+//-------------------------------------------
+
+void FileManager::replace_all_name(string& find, string& replace)
+{
+	replace_name(file_list, find, replace);
+	replace_name(dir_list, find, replace);
+}
+
+void FileManager::insert_left_all_name(string& insert_str)
+{
+	insert_left_name(file_list, insert_str);
+	insert_left_name(dir_list, insert_str);
+}
+
+void FileManager::insert_right_all_name(string& insert_str)
+{
+	insert_right_name(file_list, insert_str);
+	insert_right_name(dir_list, insert_str);
+}
+
+//-------------------------------------------
+
+
+
+
+
+void FileManager::replace_name(vector<string>& lst, string& find, string& replace)
+{
+	for (string& element : lst) { //element는 레퍼런스로 원본에 접근중임을 유의하자.
 
 		string name_without_ext = fs::path(element).stem().string(); //원본 경로에서 오직 이름만 (확장자, 기타 경로 제거)
 
 		//문자열에서 특정 문자를 찾는다, 찾는 문자가 없을 경우는 string::npos를 리턴한다. (쓰레기 값)
 		//치환할 찾는 문자열이 존재하면
 		if (name_without_ext.find(find) != string::npos) {
-			
+
 			//ReplaceAll은 원본을 변경하는 Call By Reference 함수임을 유의
 
 			string origin_path = element; //원본 경로 백업
@@ -98,39 +162,9 @@ void FileManager::replace_file_name(string find, string replace)
 	}
 }
 
-
-
-//파일 이름 오른쪽에 문자열 삽입
-void FileManager::insert_right_file_name(string insert_str)
+void FileManager::insert_left_name(vector<string>& lst, string& insert_str)
 {
-	for (string& element : file_list) { //element는 레퍼런스로 원본에 접근중임을 유의하자.
-
-		string name_without_ext = fs::path(element).stem().string(); //원본 경로에서 오직 이름만 (확장자, 기타 경로 제거)
-
-		//ReplaceAll은 원본을 변경하는 Call By Reference 함수임을 유의
-
-		string origin_path = element; //원본 경로 백업
-		string origin_without_ext = name_without_ext; //원본 이름 백업
-
-		name_without_ext += insert_str; //아까 얻은 name_without_ext에 작업
-		ReplaceAll(element, origin_without_ext, name_without_ext); //원본에 반영해서 수정해줌.
-
-		int status = rename(origin_path.c_str(), element.c_str());
-		if (status == 0)
-		{
-			cout << format(">>> {} 를 {} 로 변경하였습니다.", origin_path, element) << endl;
-		}
-		else if (status == -1)
-		{
-			cout << format(">>> {} 를 {} 로 변경하는데 실패하였습니다.", origin_path, element) << endl;
-		}
-	}
-}
-
-//파일 이름 왼쪽에 문자열 삽입
-void FileManager::insert_left_file_name(string insert_str)
-{
-	for (string& element : file_list) { //element는 레퍼런스로 원본에 접근중임을 유의하자.
+	for (string& element : lst) { //element는 레퍼런스로 원본에 접근중임을 유의하자.
 
 		string name_without_ext = fs::path(element).stem().string(); //원본 경로에서 오직 이름만 (확장자, 기타 경로 제거)
 
@@ -154,6 +188,31 @@ void FileManager::insert_left_file_name(string insert_str)
 	}
 }
 
+void FileManager::insert_right_name(vector<string>& lst, string& insert_str)
+{
+	for (string& element : lst) { //element는 레퍼런스로 원본에 접근중임을 유의하자.
+
+		string name_without_ext = fs::path(element).stem().string(); //원본 경로에서 오직 이름만 (확장자, 기타 경로 제거)
+
+		//ReplaceAll은 원본을 변경하는 Call By Reference 함수임을 유의
+
+		string origin_path = element; //원본 경로 백업
+		string origin_without_ext = name_without_ext; //원본 이름 백업
+
+		name_without_ext += insert_str; //아까 얻은 name_without_ext에 작업
+		ReplaceAll(element, origin_without_ext, name_without_ext); //원본에 반영해서 수정해줌.
+
+		int status = rename(origin_path.c_str(), element.c_str());
+		if (status == 0)
+		{
+			cout << format(">>> {} 를 {} 로 변경하였습니다.", origin_path, element) << endl;
+		}
+		else if (status == -1)
+		{
+			cout << format(">>> {} 를 {} 로 변경하는데 실패하였습니다.", origin_path, element) << endl;
+		}
+	}
+}
 
 
 //경로 끝에 역슬래시 문자를 체크하고 없으면 삽입해줌. 
