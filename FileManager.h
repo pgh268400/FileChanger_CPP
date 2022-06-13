@@ -9,6 +9,10 @@ using std::endl;
 using std::string;
 using std::cin;
 
+//모드 지정용 FileType
+enum class FileType {
+	File, Directory, All
+};
 
 class FileManager {
 public:
@@ -18,30 +22,13 @@ public:
 	FileManager(string dir_path); //생성자
 
 	//Getter()
-	int get_file_count() const; 
-	int get_dir_count() const;
-	int get_all_count() const;
+	int get_count(FileType ft) const;
 
 	//print
-	void print_file_list();
-	void print_dir_list();
-	void print_all_list();
-
-	//replace (오직 파일만)
-	void replace_file_name(string& find, string& replace);
-	void insert_left_file_name(string& insert_str);
-	void insert_right_file_name(string& insert_str);
-
-	//디렉토리만
-	void replace_dir_name(string& find, string& replace);
-	void insert_left_dir_name(string& insert_str);
-	void insert_right_dir_name(string& insert_str);
-
-	//전부
-	void replace_all_name(string& find, string& replace);
-	void insert_left_all_name(string& insert_str);
-	void insert_right_all_name(string& insert_str);
-
+	void print_list(FileType ft);
+	void replace_name(FileType ft, string& find, string& replace); //오버로딩
+	void insert_left_name(FileType ft, string& insert_str); //오버로딩
+	void insert_right_name(FileType ft, string& insert_str); //오버로딩
 
 private:
 	//Encapsulation

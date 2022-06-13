@@ -23,7 +23,7 @@ void draw_main()
 	//첫 시작화면 렌더링 
 	draw_border();
 	cout << ascii_art;
-	cout << "간편 파일이름 변경기 v0.1" << endl;
+	cout << "간편 파일이름 변경기 v0.2" << endl;
 	draw_border();
 }
 
@@ -59,23 +59,35 @@ int main(void) {
 	//파일을 다루기 위해 FileManager 객체 생성하기
 	FileManager fm(dir_path); //객체 생성
 
-	if (fm.get_file_count() != 0) {
-		fm.print_file_list(); //파일 리스트 출력
+	string oper = "";
+
+	cout << "작업하실 파일의 형태를 입력해 주세요 (f : 파일만 작업, d : 폴더만 작업, a : 모두 작업) : ";
+	cin >> oper;
+
+	draw_border();
+
+	FileType ft;
+	if (oper == "f") ft = FileType::File;
+	else if (oper == "d") ft = FileType::Directory;
+	else if (oper == "a") ft = FileType::All;
+	else { cout << "잘못된 입력입니다." << endl; return 0; }
+
+	if (fm.get_count(ft) != 0) {
+		fm.print_list(ft); //파일 리스트 출력
 	}
 	else {
-		cout << "No Files in Directory...";
+		cout << "No Items in Directory...";
 		return 0;
 	}
 
 	draw_border();
 
-	string mode;
+	string mode = "";
 
 	do {
 		cout << "작업하실 모드를 선택해주세요 (p : 치환모드, l : 왼쪽에 문자열 삽입, r : 오른쪽에 문자열 삽입, e : 종료) : ";
 		cin >> mode;
 		cin.ignore(); //문자 한개만큼 입력버퍼 비우기
-
 
 		if (mode == "p") {
 			string find, replace;
@@ -90,7 +102,8 @@ int main(void) {
 			cin >> dialog;
 
 			if (dialog == "y") {
-				fm.replace_file_name(find, replace);
+				fm.replace_name(ft, find, replace);
+				draw_border();
 			}
 			else {
 				printf("사용자에 의해 작업이 취소되었습니다.\n");
@@ -108,7 +121,8 @@ int main(void) {
 			cin >> dialog;
 
 			if (dialog == "y") {
-				fm.insert_left_file_name(insert_str);
+				fm.insert_left_name(ft, insert_str);
+				draw_border();
 			}
 			else {
 				printf("사용자에 의해 작업이 취소되었습니다.\n");
@@ -123,7 +137,8 @@ int main(void) {
 			cin >> dialog;
 
 			if (dialog == "y") {
-				fm.insert_right_file_name(insert_str);
+				fm.insert_right_name(ft, insert_str);
+				draw_border();
 			}
 			else {
 				printf("사용자에 의해 작업이 취소되었습니다.\n");

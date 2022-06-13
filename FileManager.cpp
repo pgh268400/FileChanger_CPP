@@ -2,6 +2,7 @@
 #include "FileManager.h"
 #include <filesystem>
 #include <string>
+#include "NatSort.hpp"
 
 
 namespace fs = std::filesystem;
@@ -35,96 +36,87 @@ FileManager::FileManager(string path)
 	file_count = file_list.size();
 	dir_count = dir_list.size();
 	all_count = file_count + dir_count;
+
+	//Natural Sort 알고리즘으로 친절하게 정렬도 수행 (Option)
+	SI::natural::sort(file_list);
+	SI::natural::sort(dir_list);
 }
 
-int FileManager::get_file_count() const { return file_count; }
-
-int FileManager::get_dir_count() const { return dir_count; }
-
-int FileManager::get_all_count() const { return all_count; }
-
-//파일만 출력
-void FileManager::print_file_list()
+int FileManager::get_count(FileType ft) const
 {
-	for (string& element : file_list) {
-		cout << element << endl;
+	if (ft == FileType::File) {
+		return file_count;
+	}
+	else if (ft == FileType::Directory) {
+		return dir_count;
+	}
+	else if (ft == FileType::All) {
+		return all_count;
 	}
 }
 
-//디렉토리만 출력
-void FileManager::print_dir_list()
+
+void FileManager::print_list(FileType ft)
 {
-	for (string& element : dir_list) {
-		cout << element << endl;
+	if (ft == FileType::File) {
+		for (string& element : file_list)
+			cout << element << endl;
+	}
+	else if (ft == FileType::Directory) {
+		for (string& element : dir_list)
+			cout << element << endl;
+	}
+	else if (ft == FileType::All) {
+		for (string& element : file_list)
+			cout << element << endl;
+
+		for (string& element : dir_list)
+			cout << element << endl;
 	}
 }
 
-//전부 출력
-void FileManager::print_all_list()
+void FileManager::replace_name(FileType ft, string& find, string& replace)
 {
-	print_file_list();
-	print_dir_list();
+	if (ft == FileType::File) {
+		replace_name(file_list, find, replace);
+	}
+	else if (ft == FileType::Directory) {
+		replace_name(dir_list, find, replace);
+	}
+	else if (ft == FileType::All) {
+		replace_name(file_list, find, replace);
+		replace_name(dir_list, find, replace);
+	}
 }
 
-//-------------------------------------------
-// 
-//파일 이름 치환
-void FileManager::replace_file_name(string& find, string& replace)
+void FileManager::insert_left_name(FileType ft, string& insert_str)
 {
-	replace_name(file_list, find, replace);
+	if (ft == FileType::File) {
+		insert_left_name(file_list, insert_str);
+	}
+	else if (ft == FileType::Directory) {
+		insert_left_name(dir_list, insert_str);
+	}
+	else if (ft == FileType::All) {
+		insert_left_name(file_list, insert_str);
+		insert_left_name(dir_list, insert_str);
+	}
 }
 
-
-//파일 이름 오른쪽에 문자열 삽입
-void FileManager::insert_right_file_name(string& insert_str)
+void FileManager::insert_right_name(FileType ft, string& insert_str)
 {
-	insert_right_name(file_list, insert_str);
+	if (ft == FileType::File) {
+		insert_right_name(file_list, insert_str);
+	}
+	else if (ft == FileType::Directory) {
+		insert_right_name(dir_list, insert_str);
+	}
+	else if (ft == FileType::All) {
+		insert_right_name(file_list, insert_str);
+		insert_right_name(dir_list, insert_str);
+	}
 }
 
-//파일 이름 왼쪽에 문자열 삽입
-void FileManager::insert_left_file_name(string& insert_str)
-{
-	insert_left_name(file_list, insert_str);
-}
-
-//-------------------------------------------
-
-void FileManager::replace_dir_name(string& find, string& replace)
-{
-	replace_name(dir_list, find, replace);
-}
-
-void FileManager::insert_left_dir_name(string& insert_str)
-{
-	insert_left_name(dir_list, insert_str);
-}
-
-void FileManager::insert_right_dir_name(string& insert_str)
-{
-	insert_right_name(dir_list, insert_str);
-}
-
-//-------------------------------------------
-
-void FileManager::replace_all_name(string& find, string& replace)
-{
-	replace_name(file_list, find, replace);
-	replace_name(dir_list, find, replace);
-}
-
-void FileManager::insert_left_all_name(string& insert_str)
-{
-	insert_left_name(file_list, insert_str);
-	insert_left_name(dir_list, insert_str);
-}
-
-void FileManager::insert_right_all_name(string& insert_str)
-{
-	insert_right_name(file_list, insert_str);
-	insert_right_name(dir_list, insert_str);
-}
-
-//-------------------------------------------
 
 
 
